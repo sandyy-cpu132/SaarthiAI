@@ -1,0 +1,236 @@
+baseURL = "/"
+themesDir = "themes"
+theme = "hugo-serif-theme"
+languageCode = "en-us"
+title = "Llamatik"
+defaultContentLanguage = 'en'
+defaultContentLanguageInSubdir = false
+
+[module]
+[module.hugoVersion]
+extended = true
+min = "0.55.0"
+
+[params]
+google_analytics_id = ""
+google_tag_manager_id = ""
+favicon = "favicon-32x32.png"
+showPricing = false
+
+[params.homepage]
+show_contact_box = true
+show_services_button = false
+show_pricing_button = true
+
+[params.logo]
+mobile = "images/logo/LlamatikLogo.svg"
+mobile_height = "60px"
+desktop = "images/logo/LlamatikLogo.svg"
+desktop_height = "60px"
+alt = "LLamatik"
+
+[params.fonts]
+google_fonts = 'https://fonts.googleapis.com/css2?family=Poppins+Display:wght@600&family=Poppins:wght@400;700&display=swap'
+heading = "Poppins"
+base = "Poppins"
+
+[params.colors]
+primary       = "#F59E0B"
+black         = "#1C1B1F"
+white         = "#FFFFFF"
+white_offset  = "#FFF4D6"
+grey          = "#6B7280"
+
+[params.seo]
+meta_twitter_site = "@llamatikAi"
+meta_twitter_creator = "@llamatikai"
+meta_og_image = "https://multiplatformkickstarter.com/images/logo/MKLogo.svg"
+
+[params.services]
+summary_truncate = 120
+
+[params.pricing]
+summary_truncate = 120
+
+[params.team]
+summary_large_truncate = 200
+
+[params.footer]
+copyright_text = 'Copyright © 2025-2026 Llamatik. All rights reserved.'
+
+[languages]
+[languages.en]
+contentDir = 'content/en'
+disabled = false
+languageCode = 'en-US'
+languageDirection = 'ltr'
+languageName = 'English'
+title = 'Llamatik'
+weight = 0
+
+[languages.fr]
+contentDir = 'content/fr'
+disabled = true
+languageCode = 'fr'
+languageDirection = 'ltr'
+languageName = 'Français'
+title = 'Llamatik'
+weight = 1
+
+[languages.it]
+contentDir = 'content/it'
+disabled = true
+languageCode = 'it'
+languageDirection = 'ltr'
+languageName = 'Italiano'
+title = 'Llamatik'
+weight = 2
+
+[languages.de]
+contentDir = 'content/de'
+disabled = true
+languageCode = 'de-DE'
+languageDirection = 'ltr'
+languageName = 'Deutsch'
+title = 'Llamatik'
+weight = 3
+
+[languages.es]
+contentDir = 'content/es'
+disabled = true
+languageCode = 'es-ES'
+languageDirection = 'ltr'
+languageName = 'Español'
+title = 'Llamatik'
+weight = 4
+
+[languages.ca]
+contentDir = 'content/ca'
+disabled = true
+languageCode = 'ca-ES'
+languageDirection = 'ltr'
+languageName = 'Català'
+title = 'Llamatik'
+weight = 5
+
+[languages.ru]
+contentDir = 'content/ru'
+disabled = true
+languageCode = 'ru-RU'
+languageDirection = 'ltr'
+languageName = 'Русский'
+title = 'Llamatik'
+weight = 6
+
+[languages.hi]
+contentDir = 'content/hi'
+disabled = true
+languageCode = 'hi-IN'
+languageDirection = 'ltr'
+languageName = 'हिन्दी'
+title = 'Llamatik'
+weight = 7
+
+[languages.fa]
+contentDir = 'content/fa'
+disabled = true
+languageCode = 'fa-IR'
+languageDirection = 'rtl'
+languageName = 'فارسی'
+title = 'Llamatik'
+weight = 8
+
+[languages.zh]
+contentDir = 'content/zh'
+disabled = true
+languageCode = 'zh-CN'
+languageDirection = 'ltr'
+languageName = '简体中文'
+title = 'Llamatik'
+weight = 9
+
+[languages.pt]
+contentDir = 'content/pt'
+disabled = true
+languageCode = 'pt-BR'
+languageDirection = 'ltr'
+languageName = 'Português (Brasil)'
+title = 'Llamatik'
+weight = 10
+
+[languages.ja]
+contentDir = 'content/ja'
+disabled = true
+languageCode = 'ja-JP'
+languageDirection = 'ltr'
+languageName = '日本語'
+title = 'Llamatik'
+weight = 11
+
+[menu]
+# Main Menu
+#[[menu.main]]
+#name = "Dev Tools"
+#url = "/blog/"
+#weight = 1
+
+[[menu.main]]
+name = "Try in browser"
+url = "/prompt/"
+weight = 2
+
+[[menu.main]]
+name = "Github"
+url = "https://github.com/ferranpons/Llamatik"
+weight = 3
+
+[[menu.main]]
+name = "Docs"
+url = "https://docs.llamatik.com"
+weight = 4
+
+[[menu.main]]
+name = "Blog"
+url = "/blog/"
+weight = 5
+
+[[menu.main]]
+name = "Contact"
+url = "/contact/"
+weight = 6
+
+[[menu.main]]
+name = "Download"
+url = "/download/"
+weight = 7
+
+# Footer Menu
+[[menu.footer]]
+name = "Home"
+url = "/"
+weight = 1
+
+[[menu.footer]]
+name = "Blog"
+url = "/blog"
+weight = 2
+
+[[menu.footer]]
+name = "Docs"
+url = "https://docs.llamatik.com"
+weight = 3
+
+#[[menu.footer]]
+#name = "FAQ"
+#url = "/faq/"
+#weight = 2
+
+#[[menu.footer]]
+#name = "License"
+#url = "/license"
+#weight = 3
+
+[[menu.footer]]
+name = "About"
+url = "/about/"
+weight = 4

@@ -1,0 +1,189 @@
+package com.llamatik.app.localization.translations
+
+import com.llamatik.app.localization.Localization
+
+internal object DeutschLocalization : Localization {
+    override val appName = "Llamatik"
+
+    override val actionSettings = "Einstellungen"
+    override val next = "Weiter"
+    override val close = "Verschließen"
+    override val previous = "Zurück"
+
+    override val welcome = "Willkommen beim inoffiziellen Llamatik"
+
+    override val backLabel = "Zurück"
+    override val topAppBarActionIconDescription = "Einstellungen"
+    override val home = "Startseite"
+    override val news = "Hochladen"
+    override val onBoardingStartButton = "Start"
+    override val onBoardingAlreadyHaveAnAccountButton = "Ich habe bereits ein Konto"
+    override val searchItems = "Nach Haustieren suchen"
+    override val backButton = "Zurück"
+    override val search = "Suche"
+    override val noItemFound = "Artikel nicht gefunden"
+
+    override val homeLastestNews = "Meine letzte Suche"
+    override val noResultsTitle = "Es gibt derzeit keine Ergebnisse"
+    override val noResultsDescription =
+        "Versuchen Sie später erneut zu suchen. Es ist möglich, dass der Dienst derzeit stark ausgelastet ist. Entschuldigen Sie die Unannehmlichkeiten."
+
+    override val greetingMorning = "Guten Morgen"
+    override val greetingAfternoon = "Guten Tag"
+    override val greetingEvening = "Guten Abend"
+    override val greetingNight = "Gute Nacht"
+    override val debugMenuTitle = "Debug-Menü"
+    override val featureNotAvailableMessage =
+        "Es tut uns leid, aber diese Funktion ist derzeit nicht verfügbar. Sie können die Handbücher und Leitfäden für jedes Modul auf der Modulseite finden."
+
+    override val onboardingPromoTitle1 = "LLMs offline ausführen"
+    override val onboardingPromoTitle2 = "Privat & ohne Cloud"
+    override val onboardingPromoTitle3 = "Volle lokale Kontrolle"
+    override val onboardingPromoTitle4 = "Open Source für Entwickler"
+
+    override val onboardingPromoLine1 =
+        "Llamatik bringt leistungsstarke On-Device-KI in deine Kotlin-Multiplatform-Apps — komplett offline und datenschutzfreundlich."
+
+    override val onboardingPromoLine2 =
+        "Erstelle intelligente Chatbots, Assistenten und Co-Piloten ohne Cloud-Abhängigkeiten oder Netzwerklatenz."
+
+    override val onboardingPromoLine3 =
+        "Nutze eigene Modelle, verwalte deine Vektordatenbank und behalte volle Kontrolle über deinen LLM-Stack — alles in Kotlin."
+
+    override val onboardingPromoLine4 =
+        "Entwicklerfreundlich. Betrieben mit llama.cpp. Llamatik ist Open Source und bereit für die Zukunft lokaler KI."
+
+    override val feedItemTitle = "Feed-Element"
+
+    override val loading = "Wird geladen..."
+    override val profileImageDescription = "Profilbild"
+    override val manuals = "Handbücher"
+    override val guides = "Anleitungen"
+    override val workInProgress = "IN ARBEIT"
+    override val dismiss = "schließen"
+    override val onboarding = "Einführung"
+    override val about = "Über uns"
+    override val chooseLanguage = "Sprache wählen"
+    override val change = "Ändern"
+    override val language = "Sprache: "
+
+    override val viewAll = "Alle anzeigen"
+    override val welcomeToThe = "Willkommen bei "
+    override val onboardingMainText = "Llamatik ist ein privater, lokal ausgeführter KI-Assistent, der Ihnen hilft zu chatten, Ideen zu erkunden und Dinge zu erledigen – ganz ohne Cloud.\n" +
+            "\n" +
+            "Alles läuft direkt auf Ihrem Gerät, sodass Sie die volle Kontrolle über Ihre Daten behalten und gleichzeitig unnötigen Energieverbrauch durch entfernte Server reduzieren.\n" +
+            "\n" +
+            "Weitere Informationen finden Sie unter llamatik.com" +
+            "\n" +
+            "\n" +
+            "\uD83D\uDD10 Datenschutzhinweis\n\n" +
+            "Ihre Privatsphäre ist vollständig geschützt. Diese App läuft komplett auf Ihrem Gerät.\n" +
+            "Es werden keine persönlichen Daten gesammelt, gespeichert oder weitergegeben.\n" +
+            "Es werden keine Informationen an externe Server gesendet.\n" +
+            "\n" +
+            "---\n" +
+            "\n" +
+            "Mit der Fortsetzung bestätigen Sie, dass Llamatik als lokaler KI-Assistent bereitgestellt wird und den Datenschutzbestimmungen wie DSGVO, CCPA und LGPD entspricht.\n" +
+            "\n"
+
+    override val actionContinue = "Weiter"
+    override val settingUpLlamatik = "Llamatik wird eingerichtet…"
+    override val downloadingMainModels =
+        "Herunterladen der Hauptmodelle zum ersten Mal.\nDies kann einige Minuten dauern."
+    override val progress = "Fortschritt"
+    override val me = "Ich"
+
+    override val suggestion1 = "Eine einfache Quittung für den Verkauf einer Videospielkonsole erstellen"
+    override val suggestion2 = "Eine höfliche Antwort auf eine Rabattanfrage verfassen"
+    override val suggestion3 = "Eine kurze Übersicht über die neuesten Weltnachrichten geben"
+    override val suggestion4 = "Eine Liste mit Tipps zum Online-Verkauf von Artikeln erstellen"
+    override val suggestion5 = "Gib mir eine Liste von Schritten zur Erstellung einer einfachen Rechnung"
+    override val suggestion6 = "Eine kurze Geschichte über einen magischen Wald schreiben"
+    override val askMeAnything = "Frag mich etwas…"
+    override val stop = "Stopp"
+    override val send = "Senden"
+    override val noModelSelected = "kein Modell ausgewählt"
+    override val current = "Aktuell"
+    override val select = "Auswählen"
+    override val delete = "Löschen"
+    override val download = "Herunterladen"
+    override val downloading = "Wird heruntergeladen…"
+    override val generateModels = "Modelle generieren"
+    override val generationSettings = "Generierungseinstellungen"
+    override val temperature = "Temperatur"
+    override val maxTokens = "Max. Tokens"
+    override val topP = "Top P"
+    override val topK = "Top K"
+    override val repeatPenalty = "Wiederholungsstrafe"
+    override val contextLength = "Kontextlänge"
+    override val numThreads = "Threads"
+    override val useMmap = "Speicher-Mapping (mmap)"
+    override val flashAttention = "Flash Attention"
+    override val batchSize = "Batch-Größe"
+    override val apply = "Anwenden"
+    override val downloadFinished = "Download abgeschlossen"
+
+    override val defaultSystemPrompt = """
+Du bist ein hilfreicher KI-Assistent, der vollständig auf dem Gerät des Nutzers läuft.
+Deine Prioritäten:
+- Hilfreich und klar sein.
+- Die Privatsphäre des Nutzers respektieren (keine Annahmen über externe Daten oder Online-Zugriff).
+- Effizient und prägnant sein und unnötige Tokens vermeiden.
+- Wenn du etwas nicht weißt, sage offen, dass du es nicht weißt.
+    """
+    override val smolVLM256SystemPrompt = "Du bist ein kompakter Bildassistent. Beschreibe das Bild und beantworte Fragen dazu präzise."
+    override val smolVLM500SystemPrompt = "Du bist ein visuell-sprachlicher Assistent. Analysiere das bereitgestellte Bild und beantworte Fragen dazu klar."
+
+    override val assistant = "Assistent"
+    override val user = "Benutzer"
+    override val system = "System"
+    override val relevantContext = "Relevanter Kontext"
+    override val defaultSystemPromptRendererMessage =
+        "Du bist ein hilfreicher Assistent. Nutze den bereitgestellten Kontext, wenn er relevant ist. " +
+                "Wenn der Kontext nicht ausreicht, weise kurz darauf hin, bevor du antwortest."
+
+    override val copy = "Kopieren"
+    override val paste = "Einfügen"
+
+    override val chatHistory = "Chatverlauf"
+    override val noChatsYet = "Noch keine Chats"
+    override val temporaryChat = "Temporärer Chat"
+    override val messages = "Nachrichten"
+    override val temporaryChatExplanation = "Temporärer Chat ist aktiviert – dieses Gespräch wird nicht auf deinem Gerät gespeichert."
+    override val voiceInput = "Spracheingabe"
+    override val listening = "Hört zu…"
+    override val transcribing = "Transkribiert…"
+    override val embedModels = "Embedding-Modelle"
+    override val sttModels = "Spracherkennungsmodelle"
+    override val speak = "Vorlesen"
+
+    override val vlmModels = "Visionsmodelle"
+    override val imageGenerationModels = "Bildgenerierungsmodelle"
+    override val failedToDecodeImageError = "🖼️ Bild konnte nicht dekodiert werden."
+    override val imageGeneration = "Bildgenerierung"
+    override val textGeneration = "Textgenerierung"
+    override val embeddingModelNotLoaded = "Kein Embedding-Modell geladen"
+    override val noEmbeddingModelLoaded = "Embedding-Modell nicht geladen"
+    override val recommended = "Empfohlen"
+    override val pdfSelectFile = "Bitte wählen Sie eine PDF-Datei aus."
+    override val pdfExtractionError = "Text konnte aus dieser PDF nicht extrahiert werden. Bei einer gescannten PDF ist OCR erforderlich."
+    override val pdfEmbedModelNeededWarning = "Um PDF RAG zu verwenden, laden Sie bitte das Embedding-Modell: \"nomic-embed-text\" (Embedding-Modelle)."
+    override val pdfNoUsableChunksError = "Es wurden keine verwendbaren Textabschnitte aus dieser PDF generiert."
+    override val pdfFailedToComputeEmbeddingsError = "Embeddings für diese PDF konnten nicht berechnet werden. Bitte laden Sie das Embedding-Modell erneut und versuchen Sie es erneut."
+    override val pdfIndexedForRAG = "✅ PDF für RAG indexiert"
+    override val pdfFailedToLoadPDFForRAG = "PDF konnte für RAG nicht geladen werden"
+    override val failedToComputeEmbeddings = "Embeddings für Ihre Frage konnten nicht berechnet werden. Bitte laden Sie das Embedding-Modell erneut und versuchen Sie es erneut."
+    override val thereIsAProblemWithAI = "Es gibt ein Problem mit der KI"
+    override val iDontHaveEnoughInfoInSources = "Ich habe nicht genügend Informationen in meinen Quellen."
+    override val imageModeEnabledButNoModelLoadedError = "🖼️ Bildmodus ist aktiviert, aber kein Stable-Diffusion-Modell geladen. Öffnen Sie Modelle und wählen Sie ein SD-Modell."
+    override val visionModeEnabledButNoModelLoadedError = "👁️ Visionsmodus ist aktiv, aber kein VLM-Modell geladen. Öffnen Sie Modelle und wählen Sie ein Visionsmodell."
+    override val imageGenerationFailedError = "🖼️ Bildgenerierung fehlgeschlagen (leere Ausgabe)."
+    override val imageGenerationError = "Fehler bei der Bildgenerierung"
+    override val allCachedModelsRemoved = "Alle zwischengespeicherten Modelle und der PDF-RAG-Speicher wurden erfolgreich entfernt."
+    override val settings = "Einstellungen"
+    override val removeAllDownloadedModels = "Alle heruntergeladenen Modelle und den PDF-RAG-Index entfernen"
+    override val clearCachedModelsDialogTitle = "Alle zwischengespeicherten Modelle löschen?"
+    override val clearCachedModelsDialogMessage = "Dadurch werden alle heruntergeladenen Modelldateien und der gespeicherte PDF-RAG-Index gelöscht. Dies kann nicht rückgängig gemacht werden."
+    override val cancel = "Abbrechen"
+    override val clear = "Löschen"
+}

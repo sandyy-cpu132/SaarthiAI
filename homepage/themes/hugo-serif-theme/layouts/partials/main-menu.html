@@ -1,0 +1,27 @@
+<div id="main-menu" class="main-menu">
+  <ul>
+    {{ $currentPage := . }}
+    {{ range .Site.Menus.main }}
+    {{ $active := or ($currentPage.IsMenuCurrent "main" .) ($currentPage.HasMenuCurrent "main" .) }}
+    {{ $active = or $active (eq (.URL | relLangURL) ($currentPage.RelPermalink | relLangURL)) }}
+    {{ if eq .Name "Download" }}
+    <li class="button button-secondary">
+      <div onclick="window.location.href = '/download';" href="{{.URL | absLangURL}}">
+          {{ .Pre }}
+          <span>{{ .Name }}</span>
+      </div>
+    </li>
+    {{ else }}
+    <li class="menu-item-{{ .Name | lower }} {{ if $active }}active{{ end }}">
+      <a href="{{.URL | absLangURL}}">
+        {{ .Pre }}
+        <span>{{ .Name }}</span>
+      </a>
+    </li>
+      {{ end }}
+    {{ end }}
+    <li class="menu-item-language">
+      {{ partial "language-selector.html" . }}
+    </li>
+  </ul>
+</div>

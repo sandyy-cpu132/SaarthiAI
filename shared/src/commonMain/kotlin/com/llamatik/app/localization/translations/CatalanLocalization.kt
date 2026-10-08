@@ -1,0 +1,187 @@
+package com.llamatik.app.localization.translations
+
+import com.llamatik.app.localization.Localization
+
+internal object CatalanLocalization : Localization {
+
+    override val appName = "Llamatik"
+
+    override val actionSettings = "Configuració"
+    override val next = "Següent"
+    override val close = "Tancar"
+    override val previous = "Anterior"
+
+    override val welcome = "Benvingut a Llamatik"
+
+    override val backLabel = "Enrere"
+    override val topAppBarActionIconDescription = "Configuració"
+    override val home = "Inici"
+    override val news = "Notícies"
+
+    override val onBoardingStartButton = "Començar"
+    override val onBoardingAlreadyHaveAnAccountButton = "Ja tinc un compte"
+    override val searchItems = "Cercar"
+    override val backButton = "enrere"
+    override val search = "Cercar"
+    override val noItemFound = "No s'ha trobat cap element"
+    override val homeLastestNews = "Últimes notícies"
+
+    override val noResultsTitle = "No hi ha resultats ara mateix"
+    override val noResultsDescription =
+        "Torna-ho a provar més tard. És possible que el servei estigui saturat en aquest moment."
+
+    override val greetingMorning = "Bon dia"
+    override val greetingAfternoon = "Bona tarda"
+    override val greetingEvening = "Bona tarda"
+    override val greetingNight = "Bona nit"
+
+    override val debugMenuTitle = "Menú de depuració"
+    override val featureNotAvailableMessage =
+        "Aquesta funció no està disponible ara mateix. Pots consultar manuals i guies als detalls dels mòduls."
+
+    override val onboardingPromoTitle1 = "Executa IA offline"
+    override val onboardingPromoTitle2 = "Privat i sense núvol"
+    override val onboardingPromoTitle3 = "Control total local"
+    override val onboardingPromoTitle4 = "Codi obert"
+
+    override val onboardingPromoLine1 = ""
+    override val onboardingPromoLine2 = ""
+    override val onboardingPromoLine3 = ""
+    override val onboardingPromoLine4 = ""
+
+    override val feedItemTitle = "Element"
+    override val loading = "Carregant..."
+    override val profileImageDescription = "Imatge de perfil"
+    override val manuals = "Manuals"
+    override val guides = "Guies"
+    override val workInProgress = "EN DESENVOLUPAMENT"
+    override val dismiss = "tancar"
+    override val onboarding = "Introducció"
+    override val about = "Sobre"
+    override val chooseLanguage = "Escull idioma"
+    override val change = "Canviar"
+    override val language = "Idioma: "
+
+    override val viewAll = "Veure tot"
+    override val welcomeToThe = "Benvingut a "
+
+    override val onboardingMainText =
+        "Llamatik és un assistent d'IA privat que funciona directament al teu dispositiu, dissenyat per xatejar, explorar idees i ajudar-te a fer tasques — sense dependre del núvol.\n" +
+                "\n" +
+                "Tot s'executa localment al teu dispositiu, donant-te control total sobre les teves dades i reduint el consum energètic dels servidors remots.\n" +
+                "\n" +
+                "Per a més informació visita llamatik.com" +
+                "\n" +
+                "\n" +
+                "\uD83D\uDD10 Avís de privacitat\n\n" +
+                "La teva privacitat està totalment protegida. Aquesta aplicació funciona completament al teu dispositiu.\n" +
+                "No es recopilen, emmagatzemen ni comparteixen dades personals.\n" +
+                "No s'envia cap informació a servidors externs.\n" +
+                "\n" +
+                "---\n" +
+                "\n" +
+                "En continuar, reconeixes que Llamatik s'ofereix com un assistent d'IA local i compleix amb normatives globals de privacitat com el GDPR, CCPA i LGPD.\n" +
+                "\n"
+
+    override val actionContinue = "Continuar"
+    override val settingUpLlamatik = "Configurant Llamatik…"
+    override val downloadingMainModels = "Descarregant models inicials.\nAixò pot trigar uns minuts."
+    override val progress = "Progrés"
+    override val me = "Jo"
+
+    override val suggestion1 = "Crea un rebut simple per a una venda"
+    override val suggestion2 = "Escriu una resposta educada demanant descompte"
+    override val suggestion3 = "Resumeix les últimes notícies"
+    override val suggestion4 = "Consells per vendre online"
+    override val suggestion5 = "Passos per crear una factura"
+    override val suggestion6 = "Escriu una història curta"
+    override val askMeAnything = "Pregunta'm qualsevol cosa…"
+    override val stop = "Atura"
+    override val send = "Enviar"
+    override val noModelSelected = "cap model seleccionat"
+    override val current = "Actual"
+    override val select = "Seleccionar"
+    override val delete = "Eliminar"
+    override val download = "Descarregar"
+    override val downloading = "Descarregant…"
+    override val generateModels = "Generar models"
+    override val generationSettings = "Configuració"
+    override val temperature = "Temperatura"
+    override val maxTokens = "Tokens màx."
+    override val topP = "Top P"
+    override val topK = "Top K"
+    override val repeatPenalty = "Penalització"
+    override val contextLength = "Longitud del context"
+    override val numThreads = "Fils d'execució"
+    override val useMmap = "Mapatge de memòria (mmap)"
+    override val flashAttention = "Flash Attention"
+    override val batchSize = "Mida del lot"
+    override val apply = "Aplicar"
+
+    override val defaultSystemPrompt = """
+    Ets un assistent d'IA local que s'executa completament al dispositiu de l'usuari.
+    Les teves prioritats són:
+    - Ser útil i clar.
+    - Respectar la privacitat de l'usuari (sense suposicions sobre dades externes ni accés a internet).
+    - Ser eficient i concís, evitant tokens innecessaris.
+    - Quan no sàpigues alguna cosa, digues-ho.
+    """
+    override val smolVLM256SystemPrompt = EnglishLocalization.smolVLM256SystemPrompt
+    override val smolVLM500SystemPrompt = EnglishLocalization.smolVLM500SystemPrompt
+
+    override val downloadFinished = "Descàrrega completada"
+
+    override val relevantContext = "Context rellevant"
+    override val system = "Sistema"
+    override val user = "Usuari"
+    override val assistant = "Assistent"
+    override val defaultSystemPromptRendererMessage = EnglishLocalization.defaultSystemPromptRendererMessage
+
+    override val copy = "Copiar"
+    override val paste = "Enganxar"
+
+    override val chatHistory = "Historial"
+    override val noChatsYet = "Encara no hi ha xats"
+    override val temporaryChat = "Xat temporal"
+    override val messages = "missatges"
+    override val temporaryChatExplanation = "Aquest xat no es guardarà al dispositiu."
+    override val voiceInput = "Entrada de veu"
+    override val listening = "Escoltant…"
+    override val transcribing = "Transcrivint…"
+    override val embedModels = "Models d'embedding"
+    override val sttModels = "Models de veu"
+    override val speak = "Parlar"
+
+    override val vlmModels = "Models de visió"
+    override val imageGenerationModels = "Models d'imatge"
+    override val failedToDecodeImageError = "Error en decodificar la imatge."
+    override val imageGeneration = "Generació d'imatges"
+    override val textGeneration = "Generació de text"
+    override val embeddingModelNotLoaded = "Cap model carregat"
+    override val noEmbeddingModelLoaded = "Model no carregat"
+    override val recommended = "Recomanat"
+
+    override val pdfSelectFile = "Selecciona un PDF"
+    override val pdfExtractionError = "No s'ha pogut extreure el text."
+    override val pdfEmbedModelNeededWarning = "Cal un model d'embedding."
+    override val pdfNoUsableChunksError = "No hi ha contingut usable."
+    override val pdfFailedToComputeEmbeddingsError = "Error en embeddings."
+    override val pdfIndexedForRAG = "PDF indexat"
+    override val pdfFailedToLoadPDFForRAG = "Error carregant PDF"
+    override val failedToComputeEmbeddings = "Error embeddings"
+    override val thereIsAProblemWithAI = "Problema amb la IA"
+    override val iDontHaveEnoughInfoInSources = "No tinc prou informació."
+
+    override val imageModeEnabledButNoModelLoadedError = "Mode imatge sense model."
+    override val visionModeEnabledButNoModelLoadedError = "👁️ Mode visió sense model VLM carregat. Obriu Models i seleccioneu un model de visió."
+    override val imageGenerationFailedError = "Error generant imatge."
+    override val imageGenerationError = "Error d'imatge"
+    override val allCachedModelsRemoved = "Models eliminats"
+
+    override val settings = "Configuració"
+    override val removeAllDownloadedModels = "Eliminar models"
+    override val clearCachedModelsDialogTitle = "Eliminar tot?"
+    override val clearCachedModelsDialogMessage = "Això eliminarà tots els models."
+    override val cancel = "Cancel·lar"
+    override val clear = "Eliminar"
+}

@@ -1,0 +1,166 @@
+.content {
+  a {
+    text-decoration: underline;
+  }
+  img {
+    max-width: 100%;
+    height: auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+  strong {
+    font-width: bold;
+  }
+  em {
+    font-style: italic;
+  }
+  p {
+    font-family: $font-family-base;
+    line-height: 1.56;
+    color: $grey;
+  }
+  h1 {
+    font-family: $font-family-base;
+    font-size: 34px;
+    line-height: 1.26;
+    font-weight: normal;
+    margin-top: 30px;
+    margin-bottom: 20px;
+  }
+  h2 {
+    font-family: $font-family-base;
+    font-size: 26px;
+    font-weight: normal;
+    line-height: 1.4;
+    margin-top: 30px;
+  }
+  h3 {
+    font-family: $font-family-base;
+    font-size: 20px;
+    line-height: 1.4;
+    font-weight: normal;
+    margin-top: 30px;
+  }
+  ul,
+  ol {
+    margin-bottom: 20px;
+    ul,
+    ol {
+      margin-bottom: 0;
+    }
+  }
+  ul {
+    list-style: disc;
+  }
+  ol {
+    list-style: decimal;
+  }
+  li {
+    margin-bottom: 5px;
+    line-height: 1.56;
+    margin-left: 20px;
+    color: $grey;
+  }
+  hr {
+    border: none;
+    border-bottom: 1px solid $white-offset;
+  }
+  table {
+    width: 100%;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    th,
+    td {
+      padding: 5px;
+      vertical-align: top;
+      border-top: 1px solid $white-offset;
+    }
+    thead th {
+      vertical-align: bottom;
+      border-bottom: 1px solid $white-offset;
+      text-align: left;
+      font-weight: bold;
+    }
+    tbody + tbody {
+      border-top: 1px solid $white-offset;
+    }
+  }
+  blockquote {
+    padding: 0 1em;
+    color: $grey;
+    border-left: .25em solid $primary;
+  }
+}
+
+.products-screenshots {
+  display: flex;
+  gap: 16px;
+  align-items: flex-end;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+}
+
+.products-screenshots img {
+  height: auto;
+  display: block;
+}
+
+.products-button-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.feature {
+  margin: 0 auto;
+}
+
+.localfirst-content {
+  text-align: left;
+}
+
+.localfirst-content p {
+  margin-bottom: 1.25rem;
+}
+
+.localfirst-bullets {
+  margin: 1.5rem 0 0 1.25rem;
+  padding: 0;
+  text-align: left;
+}
+
+.localfirst-image-wrap {
+  display: flex;
+  justify-content: center;
+}
+
+.localfirst-image {
+  width: 100%;
+  max-width: 420px;
+  height: auto;
+  display: block;
+}
+
+.language-selector {
+  display: inline-flex;
+  align-items: center;
+  margin-right: 12px;
+}
+
+.language-selector select {
+  height: 44px;
+  padding: 0 14px;
+  border: 1px solid #d8d8d8;
+  border-radius: 10px;
+  background: #ffffff;
+  color: #1f1f29;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  outline: none;
+}
+
+.language-selector select:hover {
+  border-color: #bfbfbf;
+}

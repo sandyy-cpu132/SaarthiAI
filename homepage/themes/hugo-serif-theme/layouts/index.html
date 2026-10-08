@@ -1,0 +1,354 @@
+{{ define "body_classes" }}page-home{{ end }}
+
+{{ define "main" }}
+{{ $home := .Site.GetPage "/home" }}
+
+<div class="intro">
+    <div class="container">
+        <div class="row justify-content-start align-items-center">
+            <div class="col-12 col-md-7 col-lg-6 order-2 order-md-1">
+                {{ .Content }}
+                {{ if .Site.Params.homepage.show_contact_box }}
+                {{ partial "buynow.html" (dict "site" .Site "context" . "show_button" "true") }}
+                {{ end }}
+            </div>
+            {{ if .Params.intro_image }}
+            <div class="col-12 col-md-5 col-lg-6 order-1 order-md-2 position-relative">
+                <img alt="{{ .Title }}"
+                     class="intro-image{{ if .Params.intro_image_absolute }} intro-image-absolute{{ end }}{{ if .Params.intro_image_hide_on_mobile }} intro-image-hide-mobile{{ end }}"
+                     src="{{ .Params.intro_image | relURL }}"/>
+            </div>
+            {{ end }}
+        </div>
+    </div>
+</div>
+
+{{ with $home.GetPage "about" }}
+<div class="strip strip-grey">
+    <div class="container pt-3 pb-3 pb-md-10">
+        <div class="row justify-content-center">
+            <div class="pricing-intro">
+                <h1>{{ .Title }}</h1>
+            </div>
+            <div class="pricing-centered">
+                {{ .Content }}
+            </div>
+        </div>
+    </div>
+</div>
+{{ end }}
+
+{{ with $home.GetPage "capabilities" }}
+<div class="strip">
+    <div class="container pt-3 pb-3 pb-md-10">
+        <div class="row justify-content-center">
+            <div class="pricing-intro">
+                <h1>{{ .Title }}</h1>
+            </div>
+        </div>
+        <div class="row pt-4">
+            {{ range .Params.items }}
+            <div class="col-12 col-md-6 col-lg-4 mb-2">
+                <div class="feature">
+                    <h2 class="feature-title">{{ .title }}</h2>
+                    <div class="feature-content">
+                        <p>{{ .body }}</p>
+                    </div>
+                </div>
+            </div>
+            {{ end }}
+        </div>
+    </div>
+</div>
+{{ end }}
+
+{{ with $home.GetPage "products" }}
+<div class="strip strip-grey">
+    <div class="container pt-3 pb-3 pb-md-10">
+        <div class="row justify-content-center">
+            <div class="pricing-intro">
+                <h1>{{ .Title }}</h1>
+            </div>
+        </div>
+
+        <div class="row pt-4 align-items-center">
+            <div class="col-12 col-md-6 mb-4">
+                <h2>{{ .Params.app_title }}</h2>
+                <p><strong>{{ .Params.app_tagline }}</strong></p>
+                <div>{{ .Content }}</div>
+
+                <p class="pt-2">
+                    <a class="button button-primary"
+                       href="{{ .Params.app_button_url | relLangURL }}"
+                       rel="noopener noreferrer">
+                        {{ .Params.app_button_text }}
+                    </a>
+                </p>
+            </div>
+
+            <div class="col-12 col-md-6 mb-4">
+                <div class="products-screenshots">
+                    <img src="/images/screenshots/phoneScreenshot1.png" width="140" alt="Llamatik screenshot 1"/>
+                    <img src="/images/screenshots/phoneScreenshot2.png" width="140" alt="Llamatik screenshot 2"/>
+                    <img src="/images/screenshots/phoneScreenshot3.png" width="140" alt="Llamatik screenshot 3"/>
+                </div>
+            </div>
+        </div>
+
+        <div class="row pt-5 align-items-center">
+            <div class="col-12 col-md-6 mb-4">
+                <h2>{{ .Params.library_title }}</h2>
+                <p><strong>{{ .Params.library_tagline }}</strong></p>
+                <div>{{ .Params.library_body | markdownify }}</div>
+
+                <p class="pt-3 products-button-row">
+                    <a class="button button-secondary"
+                       href="{{ .Params.library_button_url }}"
+                       target="_blank"
+                       rel="noopener noreferrer">
+                        {{ .Params.library_button_text }}
+                    </a>
+                    <a class="button button-tertiary"
+                       href="{{ .Params.server_button_url }}"
+                       target="_blank"
+                       rel="noopener noreferrer">
+                        {{ .Params.server_button_text }}
+                    </a>
+                </p>
+            </div>
+
+            <div class="col-12 col-md-6 mb-4">
+                <div class="products-screenshots">
+                    <img src="/images/screenshots/ideScreenshot.png" width="480" alt="Llamatik IDE screenshot"/>
+                </div>
+            </div>
+        </div>
+
+        <div class="row pt-5 align-items-center">
+            <div class="col-12 col-md-6 mb-4">
+                <h2>{{ .Params.code_title }}</h2>
+                <p><strong>{{ .Params.code_tagline }}</strong></p>
+                <div>{{ .Params.code_body | markdownify }}</div>
+
+                <p class="pt-3 products-button-row">
+                    <a class="button button-secondary"
+                       href="{{ .Params.code_button_url }}"
+                       target="_blank"
+                       rel="noopener noreferrer">
+                        {{ .Params.code_button_text }}
+                    </a>
+                </p>
+            </div>
+
+            <div class="col-12 col-md-6 mb-4">
+                <div class="products-screenshots">
+                    <img src="/images/screenshots/llamatik_code_image.png" width="480" alt="Llamatik Code IDE screenshot"/>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{{ end }}
+
+{{ with $home.GetPage "why" }}
+<div class="strip strip">
+    <div class="container pt-3 pb-3 pb-md-10">
+        <div class="row justify-content-center">
+            <div class="pricing-intro">
+                <h1>{{ .Title }}</h1>
+            </div>
+        </div>
+
+        <div class="row pt-4">
+            <div class="col-12 col-md-4 mb-3">
+                <h2>{{ .Params.col1_title }}</h2>
+                <p>{{ .Params.col1_body }}</p>
+            </div>
+            <div class="col-12 col-md-4 mb-3">
+                <h2>{{ .Params.col2_title }}</h2>
+                <p>{{ .Params.col2_body }}</p>
+            </div>
+            <div class="col-12 col-md-4 mb-3">
+                <h2>{{ .Params.col3_title }}</h2>
+                <p>{{ .Params.col3_body }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+{{ end }}
+
+{{ with $home.GetPage "localfirst" }}
+<div class="strip-grey">
+    <div class="container pt-3 pb-3 pb-md-10">
+        <div class="row align-items-center">
+            <div class="col-12 col-md-7 mb-4">
+                <h1>{{ .Title }}</h1>
+
+                <div class="localfirst-content">
+                    {{ .Content }}
+                </div>
+
+                <ul class="localfirst-bullets">
+                    {{ range .Params.bullets }}
+                    <li>{{ . }}</li>
+                    {{ end }}
+                </ul>
+            </div>
+
+            <div class="col-12 col-md-5 mb-4">
+                <div class="localfirst-image-wrap">
+                    <img src="/images/llamatik_ondevice_llms.png"
+                         class="localfirst-image"
+                         alt="Why local-first AI matters"/>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{{ end }}
+
+{{ if .Site.Data.features }}
+{{ with $home.GetPage "platform" }}
+<div class="strip strip">
+    <div class="container pt-3 pb-3 pb-md-10">
+        <div class="row justify-content-center">
+            <div class="pricing-intro">
+                <h1>{{ .Title }}</h1>
+            </div>
+            <div class="pricing-centered">
+                {{ .Content }}
+            </div>
+
+            {{ range $.Site.Data.features }}
+            <div class="col-12 col-md-6 col-lg-4 mb-2">
+                <div class="feature">
+                    <h2 class="feature-title">{{ .title }}</h2>
+                    <div class="feature-content">
+                        <p>{{ .description }}</p>
+                    </div>
+                </div>
+            </div>
+            {{ end }}
+
+            <p class="pricing-centered pt-3">
+                <code>implementation("com.llamatik:library")</code>
+            </p>
+        </div>
+    </div>
+</div>
+{{ end }}
+{{ end }}
+
+{{ with $home.GetPage "technology" }}
+<div class="strip-grey">
+    <div class="container pt-6 pb-6 pb-md-10">
+        <div class="row justify-content-start">
+            <h3 class="pricing-centered">{{ .Title }}</h3>
+            <br/>
+            <div class="pricing-centered">
+                {{ .Content }}
+            </div>
+            <br/><br/>
+            <p class="pricing-centered">
+                <img src="/images/logo/KotlinFullColorLogoOnWhiteRGB.png" width="120" alt="Kotlin Language Logo"/>
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <img src="/images/logo/KtorLogo.png" width="110" alt="Ktor Server Logo"/>
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <img src="/images/logo/ComposeMultiplatformLogo.png" width="40" alt="Compose Multiplatform Logo"/> Compose Multiplatform
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <img src="/images/logo/MaterialDesign3Logo.png" width="40" alt="Material Design 3 Logo"/> Material Design 3
+                <br><br>
+                <img src="/images/logo/LlamaCppLogo.svg" width="130" alt="Llama.cpp Logo"/>
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <img src="/images/logo/whisperCppLogo.png" width="130" alt="Llama.cpp Logo"/>
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <img src="/images/logo/stableDiffusionCppLogo.png" width="70" alt="Llama.cpp Logo"/>
+                &nbsp;&nbsp;&nbsp;&nbsp;
+            </p>
+        </div>
+    </div>
+</div>
+{{ end }}
+
+{{ with $home.GetPage "ecosystem" }}
+<div class="strip">
+    <div class="container pt-3 pb-3 pb-md-10">
+        <div class="row justify-content-center">
+            <div class="pricing-intro">
+                <h1>{{ .Title }}</h1>
+            </div>
+            <div class="pricing-centered">
+                {{ .Content }}
+            </div>
+        </div>
+        <div class="row justify-content-center pt-4">
+            <div class="col-12 col-md-8 text-center">
+                <div class="feature">
+                    <h2 class="feature-title">{{ .Params.single_title }}</h2>
+                    <div class="feature-content">
+                        <p>{{ .Params.single_body }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{{ end }}
+
+{{ with $home.GetPage "open" }}
+<div class="strip strip-grey">
+    <div class="container pt-3 pb-3 pb-md-10">
+        <div class="row justify-content-center">
+            <div class="pricing-intro">
+                <h1>{{ .Title }}</h1>
+            </div>
+            <div class="pricing-centered">
+                {{ .Content }}
+            </div>
+            <p class="pricing-centered">
+                <a href="{{ .Params.button_url }}" target="_blank" rel="noopener noreferrer">{{ .Params.button_text }}</a>
+            </p>
+        </div>
+    </div>
+</div>
+{{ end }}
+
+{{ with $home.GetPage "cta" }}
+<div class="strip">
+    <div class="container pt-4 pb-4 pb-md-8">
+        <div class="row justify-content-center">
+            <div class="pricing-intro">
+                <h1>{{ .Title }}</h1>
+            </div>
+            <div class="pricing-centered">
+                {{ .Content }}
+            </div>
+            <p class="pricing-centered pt-2">
+                <a class="button button-primary" href="{{ .Params.primary_button_url | relLangURL }}" rel="noopener noreferrer">
+                    {{ .Params.primary_button_text }}
+                </a>
+                &nbsp;&nbsp;
+                <a class="button button-secondary" href="{{ .Params.secondary_button_url | relLangURL }}" rel="noopener noreferrer">
+                    {{ .Params.secondary_button_text }}
+                </a>
+            </p>
+        </div>
+    </div>
+</div>
+{{ end }}
+
+<!--
+<div class="strip strip-grey">
+    <div class="container pt-6 pb-6 pt-md-10 pb-md-10">
+        <div class="row justify-content-center">
+            <iframe src="https://multiplatformkickstarter.substack.com/embed" width="480"
+                    height="320" style="border:1px solid #EEE; background:white;"
+                    frameborder="0" scrolling="no"></iframe>
+        </div>
+    </div>
+</div>
+-->
+{{ end }}
+
+{{ define "footer_js" }}
+{{ end }}

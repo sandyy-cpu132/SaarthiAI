@@ -1,0 +1,7 @@
+paths-ignore:
+  - llama.cpp
+  - whisper.cpp
+  - stable-diffusion.cpp
+  - "**/build/generated/**"
+  - "**/build/tmp/**"
+  - "**/.gradle/**"

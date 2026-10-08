@@ -1,0 +1,696 @@
+package com.llamatik.app.feature.chatbot.ui
+
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Stop
+import androidx.compose.material.icons.rounded.PictureAsPdf
+import androidx.compose.material.icons.rounded.Visibility
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Slider
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.TextRange
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.unit.dp
+import com.llamatik.app.feature.chatbot.viewmodel.ChatBotState
+import com.llamatik.app.feature.chatbot.viewmodel.ChatBotViewModel
+import com.llamatik.app.feature.chatbot.viewmodel.GenerationMode
+import com.llamatik.app.localization.Localization
+import com.llamatik.app.ui.icon.LlamatikIcons
+import com.llamatik.app.ui.theme.Typography
+import kotlin.math.PI
+import kotlin.math.sin
+
+const val ROUNDED_CORNER_SIZE = 16
+private const val BUTTON_SIZE = 40
+private const val HORIZONTAL_PADDING = 16
+
+@Composable
+fun ChatInputBox(
+    localization: Localization,
+    state: ChatBotState,
+    viewModel: ChatBotViewModel,
+    showSuggestions: MutableState<Boolean>,
+    input: TextFieldValue,
+    onInputChange: (TextFieldValue) -> Unit,
+    suggestions: List<String> = listOf(
+        localization.suggestion1,
+        localization.suggestion2,
+        localization.suggestion3,
+        localization.suggestion4,
+        localization.suggestion5,
+        localization.suggestion6
+    ),
+    onOpenChatHistory: () -> Unit,
+    onOpenModelSelector: () -> Unit,
+    onOpenSettings: () -> Unit,
+    isListening: Boolean,
+    isTranscribing: Boolean,
+    onMicClick: () -> Unit,
+) {
+    // If SD is not loaded, force TEXT mode (prevents getting stuck in IMAGE / IMAGE_TO_IMAGE mode)
+    LaunchedEffect(state.isStableDiffusionModelLoaded) {
+        if (!state.isStableDiffusionModelLoaded &&
+            (state.generationMode == GenerationMode.IMAGE || state.generationMode == GenerationMode.IMAGE_TO_IMAGE)
+        ) {
+            viewModel.setGenerationMode(GenerationMode.TEXT)
+        }
+    }
+
+
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(MaterialTheme.colorScheme.background)
+    ) {
+        val isGenerating = state.isGenerating
+
+        Column(horizontalAlignment = Alignment.Start) {
+            if (showSuggestions.value && suggestions.isNotEmpty()) {
+                LazyRow(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    items(suggestions.size) { index ->
+                        val hint = suggestions[index]
+                        if (index == 0) {
+                            Spacer(modifier = Modifier.size(HORIZONTAL_PADDING.dp))
+                        }
+
+                        Surface(
+                            onClick = {
+                                val message = hint.trim()
+                                if (message.isNotEmpty()) {
+                                    onInputChange(TextFieldValue())
+                                    when (state.generationMode) {
+                                        GenerationMode.TEXT -> viewModel.onMessageSendDirect(message)
+                                        GenerationMode.IMAGE -> viewModel.onImagePromptSendDirect(message)
+                                        GenerationMode.IMAGE_TO_IMAGE -> viewModel.onImg2ImgSend(message)
+                                        GenerationMode.VISION -> viewModel.onMessageSendDirect(message)
+                                    }
+                                    showSuggestions.value = false
+                                }
+                            },
+                            shape = RoundedCornerShape(ROUNDED_CORNER_SIZE.dp),
+                            color = MaterialTheme.colorScheme.secondaryContainer,
+                            tonalElevation = 1.dp,
+                            modifier = Modifier
+                                .padding(end = 8.dp, bottom = 6.dp)
+                                .widthIn(max = 200.dp)
+                        ) {
+                            Text(
+                                text = hint,
+                                style = Typography.get().labelMedium,
+                                modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
+                                color = MaterialTheme.colorScheme.onSecondaryContainer
+                            )
+                        }
+                        if (index == suggestions.size - 1) {
+                            Spacer(modifier = Modifier.size(HORIZONTAL_PADDING.dp))
+                        }
+                    }
+                }
+            }
+
+            // --- status pill + waveform (only when listening/transcribing) ---
+            if (isListening || isTranscribing) {
+                Surface(
+                    modifier = Modifier
+                        .padding(horizontal = HORIZONTAL_PADDING.dp, vertical = 4.dp)
+                        .fillMaxWidth(),
+                    shape = RoundedCornerShape(ROUNDED_CORNER_SIZE.dp),
+                    color = MaterialTheme.colorScheme.surfaceVariant,
+                    tonalElevation = 1.dp
+                ) {
+                    Row(
+                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 10.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            imageVector = LlamatikIcons.Microphone,
+                            contentDescription = localization.voiceInput,
+                            tint = if (isListening) MaterialTheme.colorScheme.primary
+                            else MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.size(18.dp)
+                        )
+
+                        Spacer(modifier = Modifier.size(8.dp))
+
+                        Text(
+                            text = when {
+                                isTranscribing -> localization.transcribing
+                                else -> localization.listening
+                            },
+                            style = Typography.get().labelMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+
+                        Spacer(modifier = Modifier.size(10.dp))
+
+                        if (isListening) {
+                            RecordingWaveform(
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .height(18.dp)
+                            )
+                        } else {
+                            Spacer(modifier = Modifier.weight(1f))
+                        }
+                    }
+                }
+            }
+
+            Row(
+                modifier = Modifier
+                    .widthIn(max = 800.dp)
+                    .fillMaxWidth()
+                    .align(Alignment.CenterHorizontally)
+                    .padding(horizontal = HORIZONTAL_PADDING.dp, vertical = 6.dp),
+                verticalAlignment = Alignment.Bottom,
+            ) {
+                Surface(
+                    shape = RoundedCornerShape(ROUNDED_CORNER_SIZE.dp),
+                    tonalElevation = 1.dp,
+                    color = MaterialTheme.colorScheme.secondaryContainer,
+                    modifier = Modifier.weight(1f)
+                ) {
+                    val keyboardController = LocalSoftwareKeyboardController.current
+                    val clipboard = LocalClipboardManager.current
+
+                    val canSend = input.text.isNotBlank()
+                    val clipboardText = clipboard.getText()?.text?.trim().orEmpty()
+                    val canPaste = clipboardText.isNotBlank()
+
+                    Column(modifier = Modifier.fillMaxWidth()) {
+                        // Pending vision image indicator
+                        if (state.generationMode == GenerationMode.VISION && state.pendingVisionImageBytes != null) {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(start = 12.dp, end = 12.dp, top = 8.dp, bottom = 4.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.SpaceBetween
+                            ) {
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    Icon(
+                                        imageVector = Icons.Rounded.Visibility,
+                                        contentDescription = null,
+                                        modifier = Modifier.size(16.dp),
+                                        tint = MaterialTheme.colorScheme.primary
+                                    )
+                                    Spacer(modifier = Modifier.size(6.dp))
+                                    Text(
+                                        text = "${state.pendingVisionImageBytes.size / 1024} KB",
+                                        style = Typography.get().labelSmall,
+                                        color = MaterialTheme.colorScheme.primary
+                                    )
+                                }
+                                IconButton(
+                                    onClick = { viewModel.onClearPendingVisionImage() },
+                                    modifier = Modifier.size(24.dp)
+                                ) {
+                                    Icon(
+                                        imageVector = LlamatikIcons.Close,
+                                        contentDescription = "Remove image",
+                                        modifier = Modifier.size(16.dp),
+                                        tint = MaterialTheme.colorScheme.onSecondaryContainer
+                                    )
+                                }
+                            }
+                        }
+
+                        // Pending img2img source image indicator + strength slider
+                        if (state.generationMode == GenerationMode.IMAGE_TO_IMAGE && state.pendingImg2ImgBytes != null) {
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(start = 12.dp, end = 12.dp, top = 8.dp, bottom = 4.dp)
+                            ) {
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.SpaceBetween
+                                ) {
+                                    Row(verticalAlignment = Alignment.CenterVertically) {
+                                        Icon(
+                                            imageVector = LlamatikIcons.Image,
+                                            contentDescription = null,
+                                            modifier = Modifier.size(16.dp),
+                                            tint = MaterialTheme.colorScheme.primary
+                                        )
+                                        Spacer(modifier = Modifier.size(6.dp))
+                                        Text(
+                                            text = "${state.pendingImg2ImgBytes.size / 1024} KB",
+                                            style = Typography.get().labelSmall,
+                                            color = MaterialTheme.colorScheme.primary
+                                        )
+                                    }
+                                    IconButton(
+                                        onClick = { viewModel.onClearPendingImg2ImgImage() },
+                                        modifier = Modifier.size(24.dp)
+                                    ) {
+                                        Icon(
+                                            imageVector = LlamatikIcons.Close,
+                                            contentDescription = "Remove image",
+                                            modifier = Modifier.size(16.dp),
+                                            tint = MaterialTheme.colorScheme.onSecondaryContainer
+                                        )
+                                    }
+                                }
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    modifier = Modifier.fillMaxWidth()
+                                ) {
+                                    Text(
+                                        text = "Strength",
+                                        style = Typography.get().labelSmall,
+                                        color = MaterialTheme.colorScheme.onSecondaryContainer
+                                    )
+                                    Slider(
+                                        value = state.img2ImgStrength,
+                                        onValueChange = { viewModel.onImg2ImgStrengthChanged(it) },
+                                        valueRange = 0.1f..1.0f,
+                                        modifier = Modifier
+                                            .weight(1f)
+                                            .padding(horizontal = 8.dp)
+                                    )
+                                    Text(
+                                        text = (kotlin.math.round(state.img2ImgStrength * 100) / 100.0).toString().let {
+                                            if ('.' !in it) "$it.00"
+                                            else it.substringBefore('.') + "." + (it.substringAfter('.') + "00").take(2)
+                                        },
+                                        style = Typography.get().labelSmall,
+                                        color = MaterialTheme.colorScheme.onSecondaryContainer
+                                    )
+                                }
+                            }
+                        }
+
+                        val ragName = state.ragPdfFileName
+                        if (ragName != null) {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(start = 12.dp, end = 12.dp, top = 8.dp, bottom = 4.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.SpaceBetween
+                            ) {
+                                val embedName = state.selectedEmbedModelName
+
+                                Text(
+                                    text = when {
+                                        state.isRagIndexing ->
+                                            "RAG: $ragName (${state.ragIndexingProgress}%)"
+
+                                        !state.isEmbedModelLoaded -> {
+                                            if (embedName.isNullOrBlank()) {
+                                                "RAG: $ragName — ${localization.noEmbeddingModelLoaded} (${localization.download} \"Nomic Embed Text\")"
+                                            } else {
+                                                "RAG: $ragName — ${localization.embeddingModelNotLoaded}: $embedName (${localization.recommended}: \"Nomic Embed Text\")"
+                                            }
+                                        }
+
+                                        else -> {
+                                            if (embedName.isNullOrBlank()) {
+                                                "RAG: $ragName"
+                                            } else {
+                                                "RAG: $ragName — Embed: $embedName"
+                                            }
+                                        }
+                                    },
+                                    style = Typography.get().labelSmall,
+                                    color = MaterialTheme.colorScheme.onSecondaryContainer,
+                                    maxLines = 1
+                                )
+
+                                if (!state.isRagIndexing && state.ragChunksCount > 0) {
+                                    Text(
+                                        text = "${state.ragChunksCount} chunks",
+                                        style = Typography.get().labelSmall,
+                                        color = MaterialTheme.colorScheme.onSecondaryContainer
+                                    )
+                                }
+                            }
+                        }
+
+                        TextField(
+                            value = input,
+                            onValueChange = { onInputChange(it) },
+                            modifier = Modifier.fillMaxWidth(),
+                            placeholder = { Text(localization.askMeAnything) },
+                            textStyle = Typography.get().bodyMedium,
+                            singleLine = false,
+                            minLines = 1,
+                            maxLines = 6,
+                            shape = RoundedCornerShape(ROUNDED_CORNER_SIZE.dp),
+                            keyboardOptions = KeyboardOptions(
+                                imeAction = ImeAction.Send,
+                                capitalization = KeyboardCapitalization.Sentences
+                            ),
+                            keyboardActions = KeyboardActions(
+                                onSend = {
+                                    val img2ImgCanSend = state.generationMode == GenerationMode.IMAGE_TO_IMAGE &&
+                                            state.pendingImg2ImgBytes != null && canSend
+                                    if (!isGenerating && (canSend || img2ImgCanSend)) {
+                                        val message = input.text.trim()
+                                        onInputChange(TextFieldValue())
+                                        when (state.generationMode) {
+                                            GenerationMode.TEXT -> {
+                                                val ragReady =
+                                                    state.isEmbedModelLoaded &&
+                                                            !state.isRagIndexing &&
+                                                            state.ragPdfFileName != null &&
+                                                            state.ragChunksCount > 0
+                                                if (ragReady) viewModel.onMessageSendWithEmbed(message)
+                                                else viewModel.onMessageSendDirect(message)
+                                            }
+
+                                            GenerationMode.IMAGE -> viewModel.onImagePromptSendDirect(message)
+                                            GenerationMode.IMAGE_TO_IMAGE -> viewModel.onImg2ImgSend(message)
+                                            GenerationMode.VISION -> viewModel.onVisionMessageSend(message)
+                                        }
+                                        showSuggestions.value = false
+                                        keyboardController?.hide()
+                                    }
+                                },
+                            ),
+                            colors = TextFieldDefaults.colors(
+                                focusedContainerColor = MaterialTheme.colorScheme.secondaryContainer,
+                                unfocusedContainerColor = MaterialTheme.colorScheme.secondaryContainer,
+                                disabledContainerColor = MaterialTheme.colorScheme.secondaryContainer,
+                                focusedIndicatorColor = Color.Transparent,
+                                unfocusedIndicatorColor = Color.Transparent
+                            ),
+                        )
+
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(8.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.End
+                        ) {
+                            if (state.isEmbedModelLoaded) {
+                                IconButton(
+                                    onClick = { viewModel.onPickPdfForRag() },
+                                    enabled = !state.isRagIndexing,
+                                    modifier = Modifier
+                                        .size(BUTTON_SIZE.dp)
+                                        .clip(RoundedCornerShape(ROUNDED_CORNER_SIZE.dp))
+                                        .background(MaterialTheme.colorScheme.surfaceVariant)
+                                        .align(Alignment.CenterVertically)
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Rounded.PictureAsPdf,
+                                        contentDescription = "Load PDF for RAG",
+                                        tint = MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
+                                }
+                            }
+
+                            Spacer(modifier = Modifier.weight(1f))
+
+                            if (canPaste) {
+                                IconButton(
+                                    onClick = {
+                                        val text = clipboard.getText()?.text?.trim().orEmpty()
+                                        if (text.isNotBlank()) {
+                                            onInputChange(
+                                                TextFieldValue(
+                                                    text = text,
+                                                    selection = TextRange(text.length)
+                                                )
+                                            )
+                                            showSuggestions.value = false
+                                        }
+                                    },
+                                    modifier = Modifier
+                                        .padding(end = 6.dp)
+                                        .size(BUTTON_SIZE.dp)
+                                        .clip(RoundedCornerShape(ROUNDED_CORNER_SIZE.dp))
+                                        .background(MaterialTheme.colorScheme.surfaceVariant)
+                                ) {
+                                    Icon(
+                                        imageVector = LlamatikIcons.Paste,
+                                        contentDescription = localization.paste,
+                                        tint = MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
+                                }
+                                Spacer(modifier = Modifier.size(6.dp))
+                            }
+
+                            if (state.isStableDiffusionModelLoaded) {
+                                val isInSdMode = state.generationMode == GenerationMode.IMAGE ||
+                                        state.generationMode == GenerationMode.IMAGE_TO_IMAGE
+                                IconButton(
+                                    onClick = {
+                                        val next = if (state.generationMode == GenerationMode.TEXT) GenerationMode.IMAGE
+                                        else GenerationMode.TEXT
+                                        viewModel.setGenerationMode(next)
+                                    },
+                                    enabled = !isGenerating && !isTranscribing,
+                                    modifier = Modifier
+                                        .padding(end = 6.dp)
+                                        .size(BUTTON_SIZE.dp)
+                                        .clip(RoundedCornerShape(ROUNDED_CORNER_SIZE.dp))
+                                        .background(MaterialTheme.colorScheme.surfaceVariant)
+                                ) {
+                                    Icon(
+                                        imageVector = if (!isInSdMode) LlamatikIcons.Image else LlamatikIcons.Text,
+                                        contentDescription = if (!isInSdMode) localization.imageGeneration else localization.textGeneration,
+                                        tint = MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
+                                }
+                                Spacer(modifier = Modifier.size(6.dp))
+
+                                // When in IMAGE mode, show a button to pick a source image for img2img
+                                if (state.generationMode == GenerationMode.IMAGE || state.generationMode == GenerationMode.IMAGE_TO_IMAGE) {
+                                    val hasImg2ImgSource = state.pendingImg2ImgBytes != null
+                                    IconButton(
+                                        onClick = { viewModel.onPickImg2ImgImage() },
+                                        enabled = !isGenerating && !isTranscribing,
+                                        modifier = Modifier
+                                            .padding(end = 6.dp)
+                                            .size(BUTTON_SIZE.dp)
+                                            .clip(RoundedCornerShape(ROUNDED_CORNER_SIZE.dp))
+                                            .background(
+                                                if (hasImg2ImgSource) MaterialTheme.colorScheme.primaryContainer
+                                                else MaterialTheme.colorScheme.surfaceVariant
+                                            )
+                                    ) {
+                                        Icon(
+                                            imageVector = LlamatikIcons.Edit,
+                                            contentDescription = "Pick source image for editing",
+                                            tint = if (hasImg2ImgSource) MaterialTheme.colorScheme.onPrimaryContainer
+                                            else MaterialTheme.colorScheme.onSurfaceVariant
+                                        )
+                                    }
+                                    Spacer(modifier = Modifier.size(6.dp))
+                                }
+                            }
+
+                            if (state.isVlmModelLoaded) {
+                                val hasImage = state.pendingVisionImageBytes != null
+                                IconButton(
+                                    onClick = { viewModel.onPickVisionImage() },
+                                    enabled = !isGenerating && !isTranscribing,
+                                    modifier = Modifier
+                                        .padding(end = 6.dp)
+                                        .size(BUTTON_SIZE.dp)
+                                        .clip(RoundedCornerShape(ROUNDED_CORNER_SIZE.dp))
+                                        .background(
+                                            if (hasImage) MaterialTheme.colorScheme.primaryContainer
+                                            else MaterialTheme.colorScheme.surfaceVariant
+                                        )
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Rounded.Visibility,
+                                        contentDescription = localization.voiceInput,
+                                        tint = if (hasImage) MaterialTheme.colorScheme.onPrimaryContainer
+                                        else MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
+                                }
+                                Spacer(modifier = Modifier.size(6.dp))
+                            }
+
+                            if (!canSend && !isGenerating && !isTranscribing && state.isSttModelLoaded) {
+                                val micEnabled = !isTranscribing && !isGenerating
+                                IconButton(
+                                    onClick = { if (micEnabled) onMicClick() },
+                                    enabled = micEnabled,
+                                    modifier = Modifier
+                                        .padding(end = 6.dp)
+                                        .size(BUTTON_SIZE.dp)
+                                        .clip(RoundedCornerShape(ROUNDED_CORNER_SIZE.dp))
+                                        .background(
+                                            when {
+                                                isListening -> MaterialTheme.colorScheme.errorContainer
+                                                else -> MaterialTheme.colorScheme.surfaceVariant
+                                            }
+                                        )
+                                ) {
+                                    Icon(
+                                        imageVector = if (isListening) Icons.Filled.Stop else LlamatikIcons.Microphone,
+                                        contentDescription = localization.voiceInput,
+                                        tint = when {
+                                            isListening -> MaterialTheme.colorScheme.onErrorContainer
+                                            else -> MaterialTheme.colorScheme.onSurfaceVariant
+                                        }
+                                    )
+                                }
+                                Spacer(modifier = Modifier.size(6.dp))
+                            }
+
+                            if (isGenerating) {
+                                IconButton(
+                                    onClick = { viewModel.stopGeneration("user_pressed_stop") },
+                                    modifier = Modifier
+                                        .size(BUTTON_SIZE.dp)
+                                        .clip(RoundedCornerShape(ROUNDED_CORNER_SIZE.dp))
+                                        .background(MaterialTheme.colorScheme.errorContainer)
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Filled.Stop,
+                                        contentDescription = localization.stop,
+                                        tint = MaterialTheme.colorScheme.onErrorContainer
+                                    )
+                                }
+                            } else {
+                                val visionCanSend = state.generationMode == GenerationMode.VISION &&
+                                        state.pendingVisionImageBytes != null
+                                val img2ImgCanSend = state.generationMode == GenerationMode.IMAGE_TO_IMAGE &&
+                                        state.pendingImg2ImgBytes != null && canSend
+                                val anySendEnabled = canSend || visionCanSend || img2ImgCanSend
+                                if (anySendEnabled) {
+                                    IconButton(
+                                        onClick = {
+                                            val message = input.text.trim()
+                                            onInputChange(TextFieldValue())
+                                            when (state.generationMode) {
+                                                GenerationMode.TEXT -> {
+                                                    val ragReady =
+                                                        state.isEmbedModelLoaded &&
+                                                                !state.isRagIndexing &&
+                                                                state.ragPdfFileName != null &&
+                                                                state.ragChunksCount > 0
+                                                    if (ragReady) viewModel.onMessageSendWithEmbed(message)
+                                                    else viewModel.onMessageSendDirect(message)
+                                                }
+
+                                                GenerationMode.IMAGE -> viewModel.onImagePromptSendDirect(message)
+                                                GenerationMode.IMAGE_TO_IMAGE -> viewModel.onImg2ImgSend(message)
+                                                GenerationMode.VISION -> viewModel.onVisionMessageSend(message)
+                                            }
+                                            showSuggestions.value = false
+                                            keyboardController?.hide()
+                                        },
+                                        enabled = anySendEnabled,
+                                        modifier = Modifier
+                                            .size(BUTTON_SIZE.dp)
+                                            .clip(RoundedCornerShape(ROUNDED_CORNER_SIZE.dp))
+                                            .background(
+                                                if (anySendEnabled) MaterialTheme.colorScheme.primary
+                                                else MaterialTheme.colorScheme.surfaceVariant
+                                            )
+                                    ) {
+                                        Icon(
+                                            imageVector = LlamatikIcons.Send,
+                                            contentDescription = localization.send,
+                                            tint = if (anySendEnabled) MaterialTheme.colorScheme.onPrimary
+                                            else MaterialTheme.colorScheme.onSurfaceVariant
+                                        )
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            GenerateModelSelector(
+                selectedModelName = state.selectedGenerateModelName,
+                onOpenModelSelector = onOpenModelSelector,
+                onOpenSettings = onOpenSettings,
+                onOpenChatHistory = onOpenChatHistory
+            )
+        }
+    }
+}
+
+@Composable
+private fun RecordingWaveform(
+    modifier: Modifier = Modifier,
+) {
+    val transition = rememberInfiniteTransition(label = "wave")
+    val phase = transition.animateFloat(
+        initialValue = 0f,
+        targetValue = 1f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(durationMillis = 700, easing = LinearEasing)
+        ),
+        label = "phase"
+    )
+
+    val bars = remember { 22 }
+    Canvas(modifier = modifier) {
+        val w = size.width
+        val h = size.height
+        val barW = (w / (bars * 2f)).coerceAtLeast(2f)
+        val gap = barW
+        val radius = CornerRadius(barW / 2f, barW / 2f)
+
+        for (i in 0 until bars) {
+            val t = (i.toFloat() / bars.toFloat()) + phase.value
+            val amp = (sin(t * 2f * PI).toFloat() * 0.5f + 0.5f)
+            val barH = (h * (0.25f + 0.75f * amp)).coerceAtLeast(2f)
+
+            val x = i * (barW + gap)
+            val y = (h - barH) / 2f
+
+            drawRoundRect(
+                color = Color.White.copy(alpha = 0.85f),
+                topLeft = Offset(x, y),
+                size = androidx.compose.ui.geometry.Size(barW, barH),
+                cornerRadius = radius
+            )
+        }
+    }
+}
